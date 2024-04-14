@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="main-container">
+            <h1 class="heading">VECTOR SPACE MODEL</h1>
+            <input placeholder="Enter Query Here" class="query_input" id="query_input"/>
+            <button class="search-btn" onclick="makeQuery()">Search</button>
+            <h2 id="header"></h2>
+            <h3 id="result" class="result-set"></h3>
+
+            <script>
+                async function makeQuery(){
+                    query = document.getElementById('query_input').value
+                    console.log(query)
+                    const response = await fetch('http://localhost:5000/search', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                        });
+                    const data = await response.json();
+                    document.getElementById('header').textContent = "Result Set:"
+                    if(data.length === 0){
+                        document.getElementById('result').textContent = "NIL"
+                    }else{
+                        var docIds = data.map(function(item) {
+                            return item[0];
+                        });
+                        document.getElementById('result').textContent = docIds
+                    }
+                }
+            </script>
+        </div>
+    </body>
+</html>
